@@ -20,6 +20,8 @@ Let's fix this up and instead of panicking do treat error-state as equal to succ
 
 Improving control flow will definitely result in avoiding logical errors and getting better code readability: you start to see each kind of behaviour you get from the function.
 
+why "kungfu" as a name? writing in kungfu requires some discipline. kung fu literally meaning "hard work" reflects on this concept. through the hard work on gaining control over our types we get clarity and power
+
 ## (📖) documentation
 
 See [documentation](/docs/index.md)
