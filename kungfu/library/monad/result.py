@@ -35,7 +35,7 @@ class Ok[Value]:
     @typing.overload
     def __init__(self, value: Value, /) -> None: ...
 
-    def __init__(self, value: Value = None) -> None:  # pyright: ignore[reportInconsistentOverload]
+    def __init__(self, value: Value = None) -> None:  # type: ignore
         self._value = value
 
     @recursive_repr()
@@ -72,16 +72,16 @@ class Ok[Value]:
     def map[T](self, op: typing.Callable[[Value], T], /) -> Ok[T]:
         return Ok(op(self._value))
 
-    def map_err[T](self, f: AnyCallable[T], /) -> Ok[Value]:
+    def map_err[T: typing.Any](self, f: AnyCallable[T], /) -> Ok[Value]:
         return self
 
-    def map_or[T](self, default_value: T, f: typing.Callable[[Value], T], /) -> Ok[T]:
+    def map_or[T: typing.Any](self, default_value: T, f: typing.Callable[[Value], T], /) -> Ok[T]:
         return Ok(f(self._value))
 
-    def map_or_else[T, V](self, default_f: AnyCallable[V], f: typing.Callable[[Value], T], /) -> Ok[T]:
+    def map_or_else[T, V: typing.Any](self, default_f: AnyCallable[V], f: typing.Callable[[Value], T], /) -> Ok[T]:
         return Ok(f(self._value))
 
-    def cast[T, V](
+    def cast[T, V: typing.Any](
         self,
         ok: typing.Callable[[Value], T] = _default_ok,
         error: AnyCallable[V] = _default_error,
@@ -95,7 +95,7 @@ class Ok[Value]:
     def then[T, Err](self, f: typing.Callable[[Value], Result[T, Err]], /) -> Result[T, Err]:
         return f(self._value)
 
-    def ensure[T, Err](self, chk: typing.Callable[[Value], bool], error: Err) -> Result[T, Err]:
+    def ensure[T, Err: typing.Any](self, chk: typing.Callable[[Value], bool], error: Err) -> Result[T, Err]:
         f: AnyCallable = lambda result: result if chk(self._value) else Error(error)
         return self.then(f)
 
@@ -152,28 +152,28 @@ class Error[E]:
     def unwrap_or_other[T](self, other: Result[T, object], /) -> T:
         return other.unwrap()
 
-    def map[T](self, op: AnyCallable[T], /) -> typing.Self:
+    def map[T: typing.Any](self, op: AnyCallable[T], /) -> typing.Self:
         return self
 
     def map_err[Err](self, f: typing.Callable[[E], Err], /) -> Error[Err]:
         return Error(f(self._error))
 
-    def map_or[T, V](self, default_value: T, f: AnyCallable[V], /) -> Ok[T]:
+    def map_or[T, V: typing.Any](self, default_value: T, f: AnyCallable[V], /) -> Ok[T]:
         return Ok(default_value)
 
-    def map_or_else[Err, T, V](self, default_f: typing.Callable[[E], T], f: AnyCallable[V], /) -> Ok[T]:
+    def map_or_else[Err, T, V: typing.Any](self, default_f: typing.Callable[[E], T], f: AnyCallable[V], /) -> Ok[T]:
         return Ok(default_f(self._error))
 
     def expect(self, error: typing.Any, /) -> typing.NoReturn:
         raise UnwrapError(error)
 
-    def then[T, Err, V](self, f: AnyCallable[V], /) -> Error[E]:
+    def then[T: typing.Any](self, f: AnyCallable[T], /) -> Error[E]:
         return self
 
-    def ensure[T](self, f: AnyCallable[T], error: E) -> Error[E]:
+    def ensure[T: typing.Any](self, f: AnyCallable[T], error: E) -> Error[E]:
         return self
 
-    def cast[T, V](
+    def cast[T: typing.Any, V: typing.Any](
         self,
         ok: AnyCallable[V] = _default_ok,
         error: Caster[E, T] = _default_error,

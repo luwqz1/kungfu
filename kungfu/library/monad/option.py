@@ -31,10 +31,7 @@ class Nothing(Singleton, Error[None]):
     def __repr__(self) -> str:
         return "Nothing()"
 
-    def __del__(self) -> None:
-        pass
-
-    def then[T](self, f: AnyCallable[T], /) -> Nothing:
+    def then[T: typing.Any](self, f: AnyCallable[T], /) -> Nothing:
         return NOTHING
 
 
@@ -42,9 +39,6 @@ class Some[Value](Ok[Value]):
     @recursive_repr()
     def __repr__(self) -> str:
         return f"Some({self._value!r})"
-
-    def __del__(self) -> None:
-        pass
 
     def map[T](self, op: typing.Callable[[Value], T], /) -> Some[T]:
         return Some(op(self._value))

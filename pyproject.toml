@@ -1,6 +1,6 @@
 [project]
 name = "kungfu-fp"
-version = "1.0.0"
+version = "1.1.1"
 description = "Functional typing in Python"
 authors = [{ name = "timoniq" }]
 requires-python = ">=3.13,<4.0"
